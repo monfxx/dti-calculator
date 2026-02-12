@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debt to Income Calculator</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="mb-8 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 flex items-center justify-center md:justify-start gap-3">
+                <i data-lucide="pie-chart" class="w-8 h-8 text-blue-600"></i>
+                Debt-to-Income Calculator
+            </h1>
+            <p class="text-slate-600 mt-2 max-w-2xl">
+                Calculate your DTI ratio to understand your financial health. Lenders use this metric to evaluate your ability to manage monthly payments and repay debts.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+            
+            <!-- Inputs Section -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Income Card -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i data-lucide="wallet" class="w-5 h-5 text-emerald-500"></i>
+                            Monthly Gross Income
+                        </h2>
+                        <select id="currency-selector" class="text-sm border border-slate-300 rounded-lg px-2 py-1.5 bg-slate-50 hover:bg-slate-100 focus:ring-2 focus:ring-blue-500 outline-none text-slate-700 font-medium transition-colors cursor-pointer">
+                            <option value="$">USD ($)</option>
+                            <option value="€">EUR (€)</option>
+                            <option value="£">GBP (£)</option>
+                            <option value="¥">JPY (¥)</option>
+                            <option value="₹">INR (₹)</option>
+                            <option value="A$">AUD (A$)</option>
+                            <option value="C$">CAD (C$)</option>
+                            <!-- Southeast Asian Currencies -->
+                            <option value="₱">PHP (₱)</option>
+                            <option value="S$">SGD (S$)</option>
+                            <option value="Rp">IDR (Rp)</option>
+                            <option value="RM">MYR (RM)</option>
+                            <option value="฿">THB (฿)</option>
+                            <option value="₫">VND (₫)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <!-- Income Inputs -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Base Salary / Wages</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Your regular monthly salary or wages before taxes.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="income-salary" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Bonuses / Overtime</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Average monthly bonuses, commissions, or overtime pay.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="income-bonus" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Other Income</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Alimony, child support, investment income, or pensions.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="income-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                        <span class="font-semibold text-slate-600">Total Monthly Income</span>
+                        <span id="display-total-income" class="text-xl font-bold text-emerald-600">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Debt Card -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                            <i data-lucide="credit-card" class="w-5 h-5 text-red-500"></i>
+                            Monthly Debt Payments
+                        </h2>
+                        <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Minimums</span>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <!-- Debt Inputs -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Rent or Mortgage</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Include monthly rent or mortgage payment (with taxes & insurance).
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-mortgage" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Auto Loans</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Total minimum monthly payments for all vehicles.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-auto" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Credit Cards</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Total minimum monthly payments across all credit cards.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-credit" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Student Loans</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Total minimum monthly student loan payments.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-student" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Monthly Installments</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Installment purchases from online shops (e.g., BNPL services, store financing).
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-installments" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Other Debts</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Personal loans, medical debt, or child support obligations.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                        <span class="font-semibold text-slate-600">Total Monthly Debt</span>
+                        <span id="display-total-debt" class="text-xl font-bold text-red-600">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="reset-btn" class="w-full py-3 flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-colors font-medium">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        Reset
+                    </button>
+                    <button id="export-btn" class="w-full py-3 flex items-center justify-center gap-2 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors font-medium shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Export to CSV
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Results Section -->
+            <div class="lg:col-span-5">
+                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 sticky top-8">
+                    <h2 class="text-xl font-semibold mb-6">Your DTI Results</h2>
+                    
+                    <!-- Main Gauge / Display -->
+                    <div class="flex flex-col items-center justify-center py-8 mb-6 bg-slate-50 rounded-2xl">
+                        <div class="relative flex items-center justify-center mb-4">
+                            <svg class="w-40 h-40 transform -rotate-90">
+                                <circle cx="80" cy="80" r="70" fill="transparent" stroke="#f1f5f9" stroke-width="16" />
+                                <circle id="gauge-circle" cx="80" cy="80" r="70" fill="transparent" stroke="#cbd5e1" stroke-width="16" stroke-dasharray="439.8" stroke-dashoffset="439.8" class="transition-all duration-1000 ease-out" stroke-linecap="round" />
+                            </svg>
+                            <div class="absolute flex flex-col items-center justify-center">
+                                <span id="display-dti-ratio" class="text-4xl font-black text-slate-800">0%</span>
+                                <span class="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">DTI Ratio</span>
+                            </div>
+                        </div>
+                        
+                        <span id="status-badge" class="px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide text-white bg-slate-200 text-slate-500">
+                            Enter Income
+                        </span>
+                    </div>
+
+                    <!-- Summary Stats -->
+                    <div class="space-y-4 mb-8">
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+                            <span class="text-slate-600 font-medium">Monthly Income</span>
+                            <span id="summary-income" class="font-semibold text-slate-900">$0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
+                            <span class="text-slate-600 font-medium">Monthly Debt</span>
+                            <span id="summary-debt" class="font-semibold text-slate-900">$0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-blue-50/50 rounded-xl border border-blue-100">
+                            <span class="text-slate-700 font-semibold">Remaining (Savings)</span>
+                            <span id="summary-savings" class="font-bold text-slate-900">$0</span>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Text -->
+                    <div class="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
+                        <h3 class="flex items-center gap-2 font-semibold text-blue-900 mb-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600"></i>
+                            What this means
+                        </h3>
+                        <p id="status-description" class="text-sm text-blue-800 leading-relaxed">
+                            Please enter your gross monthly income to calculate your DTI.
+                        </p>
+                    </div>
+
+                    <!-- Info section below -->
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <h4 class="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">Common DTI Thresholds</h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500 mr-3"></div>
+                                <span class="text-slate-600 w-16">≤ 35%</span>
+                                <span class="text-slate-800 font-medium">Excellent / Healthy</span>
+                            </li>
+                            <li class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-blue-500 mr-3"></div>
+                                <span class="text-slate-600 w-16">36-43%</span>
+                                <span class="text-slate-800 font-medium">Good / Acceptable</span>
+                            </li>
+                            <li class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-amber-500 mr-3"></div>
+                                <span class="text-slate-600 w-16">44-50%</span>
+                                <span class="text-slate-800 font-medium">High / Caution</span>
+                            </li>
+                            <li class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-3"></div>
+                                <span class="text-slate-600 w-16">&gt; 50%</span>
+                                <span class="text-slate-800 font-medium">Very High / Danger</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Get DOM Elements
+        const inputs = document.querySelectorAll('.dti-input');
+        const resetBtn = document.getElementById('reset-btn');
+        const exportBtn = document.getElementById('export-btn');
+        const currencySelector = document.getElementById('currency-selector');
+        const currencySymbolElements = document.querySelectorAll('.currency-symbol');
+        
+        const elTotalIncome = document.getElementById('display-total-income');
+        const elTotalDebt = document.getElementById('display-total-debt');
+        const elSummaryIncome = document.getElementById('summary-income');
+        const elSummaryDebt = document.getElementById('summary-debt');
+        const elSummarySavings = document.getElementById('summary-savings');
+        const elDtiRatio = document.getElementById('display-dti-ratio');
+        
+        const elStatusBadge = document.getElementById('status-badge');
+        const elStatusDesc = document.getElementById('status-description');
+        const elGaugeCircle = document.getElementById('gauge-circle');
+
+        let currentCurrency = '$';
+
+        // Update Currency Function
+        const updateCurrency = (e) => {
+            currentCurrency = e.target.value;
+            currencySymbolElements.forEach(el => {
+                el.textContent = currentCurrency;
+            });
+            calculateDTI(); // Recalculate to update the display strings
+        };
+
+        // Number Formatting
+        const formatCurrency = (value, hideDecimals = false) => {
+            const numValue = parseFloat(value);
+            const isNegative = numValue < 0;
+            const formattedNum = Math.abs(numValue).toLocaleString(undefined, {
+                minimumFractionDigits: hideDecimals ? 0 : 2,
+                maximumFractionDigits: hideDecimals ? 0 : 2
+            });
+            return (isNegative ? '-' : '') + currentCurrency + formattedNum;
+        };
+
+        // Calculation Logic
+        const calculateDTI = () => {
+            // Get Income
+            const incomeSalary = parseFloat(document.getElementById('income-salary').value) || 0;
+            const incomeBonus = parseFloat(document.getElementById('income-bonus').value) || 0;
+            const incomeOther = parseFloat(document.getElementById('income-other').value) || 0;
+            const totalIncome = incomeSalary + incomeBonus + incomeOther;
+
+            // Get Debt
+            const debtMortgage = parseFloat(document.getElementById('debt-mortgage').value) || 0;
+            const debtAuto = parseFloat(document.getElementById('debt-auto').value) || 0;
+            const debtCredit = parseFloat(document.getElementById('debt-credit').value) || 0;
+            const debtStudent = parseFloat(document.getElementById('debt-student').value) || 0;
+            const debtInstallments = parseFloat(document.getElementById('debt-installments').value) || 0;
+            const debtOther = parseFloat(document.getElementById('debt-other').value) || 0;
+            const totalDebt = debtMortgage + debtAuto + debtCredit + debtStudent + debtInstallments + debtOther;
+
+            // Calculate Ratio
+            let dtiRatio = 0;
+            if (totalIncome > 0) {
+                dtiRatio = (totalDebt / totalIncome) * 100;
+            }
+
+            const totalSavings = totalIncome - totalDebt;
+
+            // Update Text Displays
+            elTotalIncome.textContent = formatCurrency(totalIncome);
+            elTotalDebt.textContent = formatCurrency(totalDebt);
+            elSummaryIncome.textContent = formatCurrency(totalIncome, true);
+            elSummaryDebt.textContent = formatCurrency(totalDebt, true);
+            elSummarySavings.textContent = formatCurrency(totalSavings, true);
+            
+            // Color code savings (green if positive, red if negative)
+            elSummarySavings.className = `font-bold ${totalSavings >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
+
+            elDtiRatio.textContent = totalIncome > 0 ? dtiRatio.toFixed(1) + '%' : '0%';
+
+            // Determine Status
+            let status = { 
+                label: 'Enter Income', 
+                colorClass: 'bg-slate-200 text-slate-500', 
+                hex: '#cbd5e1', 
+                desc: 'Please enter your gross monthly income to calculate your DTI.' 
+            };
+
+            if (totalIncome > 0) {
+                if (dtiRatio <= 35) {
+                    status = { label: 'Healthy', colorClass: 'bg-emerald-500 text-white', hex: '#10b981', desc: 'Excellent! You have a manageable debt load. Most lenders view this favorably.' };
+                } else if (dtiRatio <= 43) {
+                    status = { label: 'Acceptable', colorClass: 'bg-blue-500 text-white', hex: '#3b82f6', desc: 'Good, but getting close to the limit for some lenders. 43% is typically the highest ratio a borrower can have and still get a Qualified Mortgage.' };
+                } else if (dtiRatio <= 50) {
+                    status = { label: 'High Risk', colorClass: 'bg-amber-500 text-white', hex: '#f59e0b', desc: 'High. Lenders may limit borrowing options. Consider aggressively paying down debt before taking on more.' };
+                } else {
+                    status = { label: 'Danger Zone', colorClass: 'bg-red-500 text-white', hex: '#ef4444', desc: 'Very High. Your debt obligations are severely limiting your financial flexibility. Focus on debt reduction strategies.' };
+                }
+            }
+
+            // Update Badge and Description
+            elStatusBadge.className = `px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide transition-colors ${status.colorClass}`;
+            elStatusBadge.textContent = status.label;
+            elStatusDesc.textContent = status.desc;
+
+            // Update SVG Gauge
+            const circumference = 439.8; // 2 * pi * r (where r = 70)
+            const offset = totalIncome > 0 ? circumference - (circumference * Math.min(dtiRatio, 100)) / 100 : circumference;
+            
+            elGaugeCircle.style.strokeDashoffset = offset;
+            elGaugeCircle.style.stroke = status.hex;
+        };
+
+        // Export to CSV Logic
+        const exportToCSV = () => {
+            const getVal = (id) => document.getElementById(id).value || '0';
+            
+            // Replaced logic to safely remove the dynamic currency and commas
+            const getText = (id) => {
+                let text = document.getElementById(id).textContent;
+                // Remove commas and current currency symbol for pure values
+                return text.replace(currentCurrency, '').replace(/,/g, '');
+            };
+
+            const csvRows = [
+                ['Category', 'Item', `Amount (${currentCurrency})`],
+                ['Income', 'Base Salary / Wages', getVal('income-salary')],
+                ['Income', 'Bonuses / Overtime', getVal('income-bonus')],
+                ['Income', 'Other Income', getVal('income-other')],
+                ['Income', 'Total Monthly Income', getText('display-total-income')],
+                [],
+                ['Debt', 'Rent or Mortgage', getVal('debt-mortgage')],
+                ['Debt', 'Auto Loans', getVal('debt-auto')],
+                ['Debt', 'Credit Cards', getVal('debt-credit')],
+                ['Debt', 'Student Loans', getVal('debt-student')],
+                ['Debt', 'Monthly Installments', getVal('debt-installments')],
+                ['Debt', 'Other Debts', getVal('debt-other')],
+                ['Debt', 'Total Monthly Debt', getText('display-total-debt')],
+                [],
+                ['Summary', 'Remaining (Savings)', getText('summary-savings')],
+                ['Summary', 'DTI Ratio', getText('display-dti-ratio')]
+            ];
+
+            const csvContent = csvRows.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // Create a temporary link to trigger download
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "DTI_Calculator_Export.csv");
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // Attach Event Listeners
+        inputs.forEach(input => {
+            input.addEventListener('input', calculateDTI);
+        });
+
+        currencySelector.addEventListener('change', updateCurrency);
+
+        resetBtn.addEventListener('click', () => {
+            inputs.forEach(input => input.value = '');
+            calculateDTI();
+        });
+
+        exportBtn.addEventListener('click', exportToCSV);
+
+        // Initial Calculation
+        calculateDTI();
+    </script>
+</body>
+</html>
