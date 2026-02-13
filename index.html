@@ -7,22 +7,49 @@
     
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
     
     <!-- Lucide Icons via CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Smooth transitions for dark mode */
+        body, div, input, select, button, span, p, h1, h2, h3, h4, li, i, svg {
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 300ms;
+        }
+    </style>
 </head>
-<body class="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
-    <div class="max-w-5xl mx-auto space-y-6">
+<body class="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-6 font-sans text-slate-800 dark:text-slate-200 flex items-center justify-center">
+    
+    <div class="w-full max-w-5xl mx-auto space-y-6">
         
-        <!-- Header -->
-        <header class="mb-8 text-center md:text-left">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 flex items-center justify-center md:justify-start gap-3">
-                <i data-lucide="pie-chart" class="w-8 h-8 text-blue-600"></i>
-                Debt-to-Income Calculator
-            </h1>
-            <p class="text-slate-600 mt-2 max-w-2xl">
-                Calculate your DTI ratio to understand your financial health. Lenders use this metric to evaluate your ability to manage monthly payments and repay debts.
-            </p>
+        <!-- Header & Toggle -->
+        <header class="mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white flex items-center justify-center md:justify-start gap-3">
+                    Debt-to-Income Calculator
+                </h1>
+                <p class="text-slate-600 dark:text-slate-400 mt-2 max-w-2xl">
+                    Calculate your DTI ratio to understand your financial health.
+                </p>
+            </div>
+            
+            <button id="theme-toggle" class="p-2.5 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-sm border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+            </button>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
@@ -31,13 +58,13 @@
             <div class="lg:col-span-7 space-y-6">
                 
                 <!-- Income Card -->
-                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                        <h2 class="text-xl font-semibold flex items-center gap-2 text-slate-800 dark:text-white">
                             <i data-lucide="wallet" class="w-5 h-5 text-emerald-500"></i>
                             Monthly Gross Income
                         </h2>
-                        <select id="currency-selector" class="text-sm border border-slate-300 rounded-lg px-2 py-1.5 bg-slate-50 hover:bg-slate-100 focus:ring-2 focus:ring-blue-500 outline-none text-slate-700 font-medium transition-colors cursor-pointer">
+                        <select id="currency-selector" class="text-sm border border-slate-300 dark:border-slate-600 rounded-lg px-2 py-1.5 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 focus:ring-2 focus:ring-blue-500 outline-none text-slate-700 dark:text-slate-200 font-medium cursor-pointer">
                             <option value="$">USD ($)</option>
                             <option value="€">EUR (€)</option>
                             <option value="£">GBP (£)</option>
@@ -45,7 +72,6 @@
                             <option value="₹">INR (₹)</option>
                             <option value="A$">AUD (A$)</option>
                             <option value="C$">CAD (C$)</option>
-                            <!-- Southeast Asian Currencies -->
                             <option value="₱">PHP (₱)</option>
                             <option value="S$">SGD (S$)</option>
                             <option value="Rp">IDR (Rp)</option>
@@ -55,169 +81,183 @@
                         </select>
                     </div>
                     
-                    <div class="space-y-2">
+                    <div class="space-y-4">
                         <!-- Income Inputs -->
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Base Salary / Wages</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Base Salary / Wages</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Your regular monthly salary or wages before taxes.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="income-salary" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="income-salary" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Bonuses / Overtime</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Bonuses / Overtime</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Average monthly bonuses, commissions, or overtime pay.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="income-bonus" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="income-bonus" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Other Income</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Other Income</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Alimony, child support, investment income, or pensions.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="income-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="income-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                        <span class="font-semibold text-slate-600">Total Monthly Income</span>
-                        <span id="display-total-income" class="text-xl font-bold text-emerald-600">$0.00</span>
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">Total Monthly Income</span>
+                        <span id="display-total-income" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">$0.00</span>
                     </div>
                 </div>
 
                 <!-- Debt Card -->
-                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 dark:border-slate-800">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-semibold flex items-center gap-2">
+                        <h2 class="text-xl font-semibold flex items-center gap-2 text-slate-800 dark:text-white">
                             <i data-lucide="credit-card" class="w-5 h-5 text-red-500"></i>
                             Monthly Debt Payments
                         </h2>
-                        <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Minimums</span>
+                        <span class="text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full border border-slate-200 dark:border-slate-700">Minimums</span>
                     </div>
                     
-                    <div class="space-y-2">
+                    <div class="space-y-4">
                         <!-- Debt Inputs -->
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Rent or Mortgage</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Rent or Mortgage</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Include monthly rent or mortgage payment (with taxes & insurance).
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-mortgage" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-mortgage" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Auto Loans</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Auto Loans</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Total minimum monthly payments for all vehicles.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-auto" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-auto" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Credit Cards</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Credit Cards</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Total minimum monthly payments across all credit cards.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-credit" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-credit" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Student Loans</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Student Loans</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Total minimum monthly student loan payments.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-student" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-student" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Monthly Installments</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Monthly Installments</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
                                     Installment purchases from online shops (e.g., BNPL services, store financing).
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-installments" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-installments" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center w-1/2 pr-2 relative group cursor-help">
-                                <label class="text-sm font-medium text-slate-700 group-hover:text-blue-600 transition-colors">Other Debts</label>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Personal Allowance</label>
                                 <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
-                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
-                                    Personal loans, medical debt, or child support obligations.
-                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Budgeted amount for personal spending, hobbies, or entertainment.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
                                 </div>
                             </div>
-                            <div class="relative w-1/2">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 sm:text-sm">$</span></div>
-                                <input type="number" id="debt-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all shadow-sm" />
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-allowance" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center sm:w-1/2 pr-2 relative group cursor-help">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Other Debts</label>
+                                <i data-lucide="info" class="w-3.5 h-3.5 ml-1.5 text-slate-400 group-hover:text-blue-500 transition-colors"></i>
+                                <div class="absolute bottom-full left-0 mb-2 w-48 p-2 bg-slate-800 dark:bg-slate-700 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 pointer-events-none">
+                                    Personal loans, medical debt, or child support obligations.
+                                    <div class="absolute top-full left-4 -mt-1 border-4 border-transparent border-t-slate-800 dark:border-t-slate-700"></div>
+                                </div>
+                            </div>
+                            <div class="relative w-full sm:w-1/2">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><span class="currency-symbol text-slate-500 dark:text-slate-400 sm:text-sm">$</span></div>
+                                <input type="number" id="debt-other" min="0" step="1" placeholder="0" class="dti-input w-full pl-9 pr-3 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none shadow-sm placeholder-slate-400 dark:placeholder-slate-500" />
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                        <span class="font-semibold text-slate-600">Total Monthly Debt</span>
-                        <span id="display-total-debt" class="text-xl font-bold text-red-600">$0.00</span>
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                        <span class="font-semibold text-slate-600 dark:text-slate-400">Total Monthly Debt</span>
+                        <span id="display-total-debt" class="text-xl font-bold text-red-600 dark:text-red-400">$0.00</span>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="grid grid-cols-2 gap-4">
-                    <button id="reset-btn" class="w-full py-3 flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 hover:bg-slate-200 rounded-xl transition-colors font-medium">
+                    <button id="reset-btn" class="w-full py-3 flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition-colors font-medium border border-transparent dark:border-slate-700">
                         <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                         Reset
                     </button>
-                    <button id="export-btn" class="w-full py-3 flex items-center justify-center gap-2 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors font-medium shadow-sm">
+                    <button id="export-btn" class="w-full py-3 flex items-center justify-center gap-2 text-white bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-700 dark:hover:bg-emerald-600 rounded-xl transition-colors font-medium shadow-sm">
                         <i data-lucide="download" class="w-4 h-4"></i>
                         Export to CSV
                     </button>
@@ -227,77 +267,77 @@
 
             <!-- Results Section -->
             <div class="lg:col-span-5">
-                <div class="bg-white rounded-2xl p-6 md:p-8 shadow-xl shadow-slate-200/50 border border-slate-100 sticky top-8">
-                    <h2 class="text-xl font-semibold mb-6">Your DTI Results</h2>
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 sticky top-8">
+                    <h2 class="text-xl font-semibold mb-6 text-slate-900 dark:text-white">Your DTI Results</h2>
                     
                     <!-- Main Gauge / Display -->
-                    <div class="flex flex-col items-center justify-center py-8 mb-6 bg-slate-50 rounded-2xl">
+                    <div class="flex flex-col items-center justify-center py-8 mb-6 bg-slate-50 dark:bg-slate-950 rounded-2xl">
                         <div class="relative flex items-center justify-center mb-4">
                             <svg class="w-40 h-40 transform -rotate-90">
-                                <circle cx="80" cy="80" r="70" fill="transparent" stroke="#f1f5f9" stroke-width="16" />
-                                <circle id="gauge-circle" cx="80" cy="80" r="70" fill="transparent" stroke="#cbd5e1" stroke-width="16" stroke-dasharray="439.8" stroke-dashoffset="439.8" class="transition-all duration-1000 ease-out" stroke-linecap="round" />
+                                <circle cx="80" cy="80" r="70" fill="transparent" class="text-slate-200 dark:text-slate-800 stroke-current" stroke-width="16" />
+                                <circle id="gauge-circle" cx="80" cy="80" r="70" fill="transparent" class="text-slate-300 dark:text-slate-700 stroke-current" stroke-width="16" stroke-dasharray="439.8" stroke-dashoffset="439.8" class="transition-all duration-1000 ease-out" stroke-linecap="round" />
                             </svg>
                             <div class="absolute flex flex-col items-center justify-center">
-                                <span id="display-dti-ratio" class="text-4xl font-black text-slate-800">0%</span>
-                                <span class="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">DTI Ratio</span>
+                                <span id="display-dti-ratio" class="text-3xl font-black text-slate-800 dark:text-white">0%</span>
+                                <span class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold mt-1">DTI Ratio</span>
                             </div>
                         </div>
                         
-                        <span id="status-badge" class="px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide text-white bg-slate-200 text-slate-500">
+                        <span id="status-badge" class="px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wide text-white bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                             Enter Income
                         </span>
                     </div>
 
                     <!-- Summary Stats -->
                     <div class="space-y-4 mb-8">
-                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                            <span class="text-slate-600 font-medium">Monthly Income</span>
-                            <span id="summary-income" class="font-semibold text-slate-900">$0</span>
+                        <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-950 rounded-xl">
+                            <span class="text-slate-600 dark:text-slate-400 font-medium">Monthly Income</span>
+                            <span id="summary-income" class="font-semibold text-slate-900 dark:text-white">$0</span>
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-xl">
-                            <span class="text-slate-600 font-medium">Monthly Debt</span>
-                            <span id="summary-debt" class="font-semibold text-slate-900">$0</span>
+                        <div class="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-950 rounded-xl">
+                            <span class="text-slate-600 dark:text-slate-400 font-medium">Monthly Debt</span>
+                            <span id="summary-debt" class="font-semibold text-slate-900 dark:text-white">$0</span>
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-blue-50/50 rounded-xl border border-blue-100">
-                            <span class="text-slate-700 font-semibold">Remaining (Savings)</span>
-                            <span id="summary-savings" class="font-bold text-slate-900">$0</span>
+                        <div class="flex justify-between items-center p-3 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-900/30">
+                            <span class="text-slate-700 dark:text-blue-200 font-semibold">Remaining (Savings)</span>
+                            <span id="summary-savings" class="font-bold text-slate-900 dark:text-white">$0</span>
                         </div>
                     </div>
 
                     <!-- Analysis Text -->
-                    <div class="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
-                        <h3 class="flex items-center gap-2 font-semibold text-blue-900 mb-2">
-                            <i data-lucide="info" class="w-5 h-5 text-blue-600"></i>
+                    <div class="bg-blue-50/50 dark:bg-slate-800 p-5 rounded-xl border border-blue-100 dark:border-slate-700">
+                        <h3 class="flex items-center gap-2 font-semibold text-blue-900 dark:text-blue-300 mb-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
                             What this means
                         </h3>
-                        <p id="status-description" class="text-sm text-blue-800 leading-relaxed">
+                        <p id="status-description" class="text-sm text-blue-800 dark:text-slate-300 leading-relaxed">
                             Please enter your gross monthly income to calculate your DTI.
                         </p>
                     </div>
 
                     <!-- Info section below -->
-                    <div class="mt-8 pt-6 border-t border-slate-100">
-                        <h4 class="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">Common DTI Thresholds</h4>
+                    <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3 uppercase tracking-wider">Common DTI Thresholds</h4>
                         <ul class="space-y-2">
                             <li class="flex items-center text-sm">
                                 <div class="w-3 h-3 rounded-full bg-emerald-500 mr-3"></div>
-                                <span class="text-slate-600 w-16">≤ 35%</span>
-                                <span class="text-slate-800 font-medium">Excellent / Healthy</span>
+                                <span class="text-slate-600 dark:text-slate-400 w-16">≤ 35%</span>
+                                <span class="text-slate-800 dark:text-slate-200 font-medium">Excellent / Healthy</span>
                             </li>
                             <li class="flex items-center text-sm">
                                 <div class="w-3 h-3 rounded-full bg-blue-500 mr-3"></div>
-                                <span class="text-slate-600 w-16">36-43%</span>
-                                <span class="text-slate-800 font-medium">Good / Acceptable</span>
+                                <span class="text-slate-600 dark:text-slate-400 w-16">36-43%</span>
+                                <span class="text-slate-800 dark:text-slate-200 font-medium">Good / Acceptable</span>
                             </li>
                             <li class="flex items-center text-sm">
                                 <div class="w-3 h-3 rounded-full bg-amber-500 mr-3"></div>
-                                <span class="text-slate-600 w-16">44-50%</span>
-                                <span class="text-slate-800 font-medium">High / Caution</span>
+                                <span class="text-slate-600 dark:text-slate-400 w-16">44-50%</span>
+                                <span class="text-slate-800 dark:text-slate-200 font-medium">High / Caution</span>
                             </li>
                             <li class="flex items-center text-sm">
                                 <div class="w-3 h-3 rounded-full bg-red-500 mr-3"></div>
-                                <span class="text-slate-600 w-16">&gt; 50%</span>
-                                <span class="text-slate-800 font-medium">Very High / Danger</span>
+                                <span class="text-slate-600 dark:text-slate-400 w-16">&gt; 50%</span>
+                                <span class="text-slate-800 dark:text-slate-200 font-medium">Very High / Danger</span>
                             </li>
                         </ul>
                     </div>
@@ -319,6 +359,8 @@
         const exportBtn = document.getElementById('export-btn');
         const currencySelector = document.getElementById('currency-selector');
         const currencySymbolElements = document.querySelectorAll('.currency-symbol');
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
         
         const elTotalIncome = document.getElementById('display-total-income');
         const elTotalDebt = document.getElementById('display-total-debt');
@@ -332,6 +374,21 @@
         const elGaugeCircle = document.getElementById('gauge-circle');
 
         let currentCurrency = '$';
+
+        // Dark Mode Logic
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
 
         // Update Currency Function
         const updateCurrency = (e) => {
@@ -367,8 +424,9 @@
             const debtCredit = parseFloat(document.getElementById('debt-credit').value) || 0;
             const debtStudent = parseFloat(document.getElementById('debt-student').value) || 0;
             const debtInstallments = parseFloat(document.getElementById('debt-installments').value) || 0;
+            const debtAllowance = parseFloat(document.getElementById('debt-allowance').value) || 0;
             const debtOther = parseFloat(document.getElementById('debt-other').value) || 0;
-            const totalDebt = debtMortgage + debtAuto + debtCredit + debtStudent + debtInstallments + debtOther;
+            const totalDebt = debtMortgage + debtAuto + debtCredit + debtStudent + debtInstallments + debtAllowance + debtOther;
 
             // Calculate Ratio
             let dtiRatio = 0;
@@ -386,15 +444,16 @@
             elSummarySavings.textContent = formatCurrency(totalSavings, true);
             
             // Color code savings (green if positive, red if negative)
-            elSummarySavings.className = `font-bold ${totalSavings >= 0 ? 'text-emerald-600' : 'text-red-600'}`;
+            // Note: Colors adjusted for dark mode readability
+            elSummarySavings.className = `font-bold ${totalSavings >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`;
 
             elDtiRatio.textContent = totalIncome > 0 ? dtiRatio.toFixed(1) + '%' : '0%';
 
             // Determine Status
             let status = { 
                 label: 'Enter Income', 
-                colorClass: 'bg-slate-200 text-slate-500', 
-                hex: '#cbd5e1', 
+                colorClass: 'bg-slate-200 dark:bg-slate-800 text-slate-500 dark:text-slate-400', 
+                hex: htmlElement.classList.contains('dark') ? '#475569' : '#cbd5e1', 
                 desc: 'Please enter your gross monthly income to calculate your DTI.' 
             };
 
@@ -420,7 +479,15 @@
             const offset = totalIncome > 0 ? circumference - (circumference * Math.min(dtiRatio, 100)) / 100 : circumference;
             
             elGaugeCircle.style.strokeDashoffset = offset;
-            elGaugeCircle.style.stroke = status.hex;
+            
+            // Only update stroke color if it's one of the colored statuses, otherwise let CSS classes handle it
+            if (totalIncome > 0) {
+                elGaugeCircle.style.stroke = status.hex;
+                elGaugeCircle.classList.remove('text-slate-300', 'dark:text-slate-700');
+            } else {
+                 elGaugeCircle.style.stroke = '';
+                 elGaugeCircle.classList.add('text-slate-300', 'dark:text-slate-700');
+            }
         };
 
         // Export to CSV Logic
@@ -446,6 +513,7 @@
                 ['Debt', 'Credit Cards', getVal('debt-credit')],
                 ['Debt', 'Student Loans', getVal('debt-student')],
                 ['Debt', 'Monthly Installments', getVal('debt-installments')],
+                ['Debt', 'Personal Allowance', getVal('debt-allowance')],
                 ['Debt', 'Other Debts', getVal('debt-other')],
                 ['Debt', 'Total Monthly Debt', getText('display-total-debt')],
                 [],
